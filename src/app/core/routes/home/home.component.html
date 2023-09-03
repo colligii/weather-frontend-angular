@@ -8,10 +8,36 @@
     </div>
   
     <div>
-      <form class="grid justify-center">
-        <input class="border-2 rounded p-2 mb-4" type="text">
-        <button class="border-2 rounded-lg p-2 bg-blue text-white border-white">
-          Pesquisar
+      <form (submit)="handleSubmit($event)" class="grid justify-center">
+        <input [formControl]="place" class="border-2 rounded p-2 mb-4" type="text" (focus)="enableList()" (blur)="disableList()">
+
+        <ng-container *ngIf="showList">
+          
+          <ng-container *ngIf="((geocoding$ | async)?.length || 0) > 1 else noData">
+
+            <div>
+              <ul>
+
+                <li *ngFor="let country of (geocoding$ | async)">
+
+                  {{ country.name }}
+
+                </li>
+
+              </ul>
+            </div>
+
+          </ng-container>
+
+          <ng-template #noData>
+            Don't find place with query
+          </ng-template>
+
+
+        </ng-container>
+
+        <button type="submit" class="border-2 rounded-lg p-2 bg-blue text-white border-white">
+          Search
         </button>
       </form>
       
